@@ -10,10 +10,6 @@ yarn-error.log*
 .angular/
 /coverage/
 
-# --- Env files ---
-.env
-.env.*     # z. B. .env.production, .env.local
-
 # --- OS/IDE junk ---
 .DS_Store
 Thumbs.db
