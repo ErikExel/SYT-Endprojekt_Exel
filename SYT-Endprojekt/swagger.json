@@ -1,0 +1,182 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Wetter-API",
+    "version": "1.1.0",
+    "description": "API zur Verwaltung von Orten, Wetterdaten und Unwetterwarnungen"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1/weather",
+      "description": "Lokaler Server"
+    }
+  ],
+  "paths": {
+    "/orte": {
+      "get": {
+        "summary": "Alle Orte anzeigen",
+        "responses": {
+          "200": {
+            "description": "Liste aller Orte",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Serverfehler"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ort hinzufügen per Lat/Lon",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lat": {
+                    "type": "number"
+                  },
+                  "lon": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "lat",
+                  "lon"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ort erfolgreich erstellt"
+          },
+          "400": {
+            "description": "Ungültige Eingabe"
+          },
+          "500": {
+            "description": "Serverfehler"
+          }
+        }
+      }
+    },
+    "/orte/{id}": {
+      "delete": {
+        "summary": "Ort löschen",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ort gelöscht"
+          },
+          "500": {
+            "description": "Fehler beim Löschen"
+          }
+        }
+      }
+    },
+    "/weather": {
+      "get": {
+        "summary": "Wetterdaten mit Lat/Lon abrufen und speichern",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wetterdaten erfolgreich geladen"
+          },
+          "400": {
+            "description": "Koordinaten fehlen oder ungültig"
+          },
+          "500": {
+            "description": "Fehler beim Abrufen oder Speichern"
+          }
+        }
+      }
+    },
+    "/wetterdaten/{ort_id}": {
+      "get": {
+        "summary": "Letzte Wetterdaten eines Ortes anzeigen",
+        "parameters": [
+          {
+            "name": "ort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wetterdaten vorhanden oder leer"
+          },
+          "500": {
+            "description": "Fehler beim Laden"
+          }
+        }
+      }
+    },
+    "/warnung": {
+      "post": {
+        "summary": "Unwetterwarnung an Clients senden (via WebSocket)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Warnung erfolgreich gesendet"
+          },
+          "400": {
+            "description": "Warnungsnachricht fehlt"
+          },
+          "500": {
+            "description": "Fehler beim Senden der Warnung"
+          }
+        }
+      }
+    }
+  }
+}
