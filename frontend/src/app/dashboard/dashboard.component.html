@@ -1,0 +1,26 @@
+<h2>Orte verwalten</h2>
+<ul>
+  <li *ngFor="let ort of orte">
+    {{ ort.name }} ({{ ort.lat }}, {{ ort.lon }})
+    <button (click)="selectOrt(ort)">Wetter anzeigen</button>
+    <button (click)="deleteOrt(ort.id)">Ort löschen</button>
+  </li>
+</ul>
+
+<input [(ngModel)]="newLat" placeholder="Latitude">
+<input [(ngModel)]="newLon" placeholder="Longitude">
+<button (click)="addOrt()">Ort hinzufügen</button>
+
+<div *ngIf="wetter">
+  <h3>Aktuelles Wetter für {{ selectedOrt?.name }}</h3>
+  <p>Temperatur: {{ wetter.temperatur }} °C</p>
+  <p>Windstärke: {{ wetter.windstaerke }} km/h</p>
+  <p>Zeitpunkt: {{ wetter.zeitpunkt }}</p>
+</div>
+
+<div *ngIf="popupVisible" class="popup-overlay">
+  <div class="popup">
+    <h1>{{ warnung }}</h1>
+    <button (click)="closePopup()">OK</button>
+  </div>
+</div>
